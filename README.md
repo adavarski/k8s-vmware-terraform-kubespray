@@ -2,21 +2,18 @@
 This Terraform project allows you to deploy Kubernetes on vSphere. It uses Kubespray for the deployment and allows you to tweak of the deployment options.
 
 
-## Pre: Install ESXi 6.7, deploy VMware vCenter Server Appliance  6.7(VCSA) as ESXi VM, create k8s-cluster1 resource pool.
+## Prerequisite
+Install ESXi 6.7/7, deploy VMware vCenter Server Appliance  6.7/7(VCSA) as ESXi VM, create k8s-cluster1 resource pool.
 
-iRef: 
+Ref:
+```
 https://systemzone.net/vmware-esxi-6-7-installation-and-basic-configuration/
-https://blog.inkubate.io/install-and-manage-automatically-a-kubernetes-cluster-on-vmware-vsphere-with-terraform-and-kubespray/
-https://medium.com/@chfrank_cgn/creating-a-kubernetes-cluster-on-vsphere-7-with-rancher-and-terraform-b45a1e33573f
 http://vcallaway.com/esxcli-cheat-sheet/
-https://nolabnoparty.com/en/vsphere-6-7-install-vcsa-6-7-pt-1/
 https://esxsi.com/2018/04/25/vcsa67/
 https://www.wintips.org/how-to-install-vcenter-server-appliance-in-vmware-vsphere-hypervisor-esxi-6-7/
-https://infohub.delltechnologies.com/l/deployment-guide-vmware-vsphere-and-red-hat-enterprise-linux-for-high-performance-database-applications/installing-esxi-and-deploying-vcenter-server-appliance-on-the-management-server
 https://www.nakivo.com/blog/vmware-vsphere-7-installation-setup/
 https://github.com/kubernetes-sigs/kubespray/blob/master/docs/vsphere.md
-
-
+```
 
 ## What does this project do?
 This Terraform project will automatically create VM's on VMware vSphere required to deploy Kubernetes using Kubespray. Then it will download Kubespray and prepare the nodes. Finally it can automatically run Kubespray to deploy Kubernetes, but you can also choose to hold-of with the Kubespray deployment (see the `run_kubespray` parameter in `variables.tf`, by default run_kubespray = "no"), so that you can tweak the Kubespray parameters. Once have the correct settings in place for Kubespray you can run Kubespray with a single command (`~/run_kubespray.sh`) to deploy Kubernetes.
@@ -24,7 +21,7 @@ This Terraform project will automatically create VM's on VMware vSphere required
 Once the deployment is done you get an Administrative Linux VM, which contains the Kubespray software in it's home directory, so that you can maintain the cluster afterwards. It can also be used to run `kubectl` and access your Kubernetes environment.
 Besides the Administrative Linux VM, it will create the number of Kubernetes nodes you have specified (see `number_of_nodes` parameter in `variables.tf`) and deploy Kubernetes on those nodes.
 
-## System requirements
+## Local system requirements (laptop/workstation)
 
 To be able to apply this Terraform configuration to your vSphere environment, make sure you have to following requirements in place. Basically all you need are git, for cloning the github repo and the Terraform binary to run the playbook.
 
@@ -92,12 +89,12 @@ If you have chosen to not run Kubespray automatically during the deployment, you
 
 `~/kubespray/inventory/k8s-on-vmware/`
 
-Once you're done with the settings, kick-off the Kubespray with the following command to deploy Kubernetes:
+Once you're done with the settings, kick-off the Kubespray with the following command to deploy Kubernetes (by default variables.tf:run_kubespray = "no"):
 
 `~/run-kubespray.sh`
 
 ```
-davar@carbon:~/Documents/0-0-0-Tarya-Fintech/GITHUB-k8s-vmware-kubespary/k8s-on-vmware$ ssh -i keys/id_rsa-k8s-on-vmware k8sadmin@192.168.1.150 -o IdentitiesOnly=yes
+$ ssh -i keys/id_rsa-k8s-on-vmware k8sadmin@192.168.1.150 -o IdentitiesOnly=yes
 The authenticity of host '192.168.1.150 (192.168.1.150)' can't be established.
 ECDSA key fingerprint is SHA256:EGKOEQ+zqB0knC1Xs2+l35MAIajNUsWccrHY/j3gBSI.
 Are you sure you want to continue connecting (yes/no)? yes
