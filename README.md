@@ -266,8 +266,6 @@ node2   Ready    control-plane,master   5m1s    v1.21.3   192.168.1.152   <none>
 node3   Ready    <none>                 3m52s   v1.21.3   192.168.1.153   <none>        Ubuntu 18.04.5 LTS   4.15.0-151-generic   docker://20.10.7
 node4   Ready    <none>                 3m52s   v1.21.3   192.168.1.154   <none>        Ubuntu 18.04.5 LTS   4.15.0-151-generic   docker://20.10.7
 node5   Ready    <none>                 3m52s   v1.21.3   192.168.1.155   <none>        Ubuntu 18.04.5 LTS   4.15.0-151-generic   docker://20.10.7
-k8sadmin@k8s-adminhost:~$ 
-
 
 k8sadmin@k8s-adminhost:~$ kubectl get all --all-namespaces
 NAMESPACE     NAME                                           READY   STATUS    RESTARTS   AGE
