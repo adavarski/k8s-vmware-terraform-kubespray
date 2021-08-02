@@ -21,13 +21,15 @@ To be able to apply this Terraform configuration to your vSphere environment, ma
 
 - Install Terraform, see https://learn.hashicorp.com/terraform/getting-started/install.html for instructions.
 
-  Example steps for installing Terraform (latest version):
-  ```
-  curl -O https://releases.hashicorp.com/terraform/{VERSION}/terraform_{VERSION}_linux_amd64.zip
-  unzip terraform_{VERSION}_linux_amd64.zip
-  sudo mkdir -p /usr/local/bin
-  sudo mv terraform /usr/local/bin/
-  ```
+  Example steps for installing Terraform :
+  
+```
+#Install terraform
+curl https://releases.hashicorp.com/terraform/0.14.4/terraform_0.14.4_linux_amd64.zip -o /tmp/terraform_0.14.4_linux_amd64.zip
+cd /tmp/; unzip terraform_0.14.4_linux_amd64.zip
+sudo mv terraform /usr/local/bin/
+rm /tmp/terraform_0.14.4_linux_amd64.zip
+```
 
   Test the Terraform installation (this command should return the Terraform version installed):
   
