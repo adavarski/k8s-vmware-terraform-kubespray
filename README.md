@@ -11,15 +11,7 @@ Besides the Administrative Linux VM, it will create the number of Kubernetes nod
 
 ## VMware vSphere environment install/setup requirements
 
-Install ESXi 6.7/7, deploy VMware vCenter Server Appliance  6.7/7(VCSA) as ESXi VM, create datacenter and add ESXi host to it.
-
-REF:
-```
-https://www.nakivo.com/blog/vmware-vsphere-7-installation-setup/
-https://systemzone.net/vmware-esxi-6-7-installation-and-basic-configuration/
-https://www.wintips.org/how-to-install-vcenter-server-appliance-in-vmware-vsphere-hypervisor-esxi-6-7/
-https://github.com/kubernetes-sigs/kubespray/blob/master/docs/vsphere.md
-```
+Install ESXi 6.7/7, deploy VMware vCenter Server Appliance  6.7/7(VCSA) as ESXi VM, create datacenter and add ESXi hosts to it.
 
 ## Local system requirements (laptop/workstation)
 
@@ -329,3 +321,13 @@ kube-system   replicaset.apps/dns-autoscaler-7df78bfcfb            1         1  
 ```
 **Anything else?**
 Well you're on your own from here, however checkout the `add-ons` folder to deploy some regular components like creating a Dashboard user (for some GUI management), Metal Load Balancer (metallb) for a load balancera and the NGINX Ingress service.
+
+
+REF:
+```
+https://www.nakivo.com/blog/vmware-vsphere-7-installation-setup/
+https://systemzone.net/vmware-esxi-6-7-installation-and-basic-configuration/
+https://www.wintips.org/how-to-install-vcenter-server-appliance-in-vmware-vsphere-hypervisor-esxi-6-7/
+https://github.com/kubernetes-sigs/kubespray/blob/master/docs/vsphere.md
+etc.
+```
