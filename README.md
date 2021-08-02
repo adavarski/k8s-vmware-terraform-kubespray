@@ -1,5 +1,5 @@
 # Deploy Kubernetes on VMware vSphere using Terraform and Kubespray
-This Terraform project allows you to deploy Kubernetes on vSphere. It uses Kubespray for the deployment and allows you to tweak of the deployment options.
+k8s on VMware vSphere : a simple Terraform based automated deployment of k8s based on Kubespray deployment. This Terraform project allows you to deploy Kubernetes on vSphere. It uses Kubespray for the deployment and allows you to tweak of the deployment options.
 
 ## What does this project do?
 This Terraform project will automatically create VM's on VMware vSphere required to deploy Kubernetes using Kubespray. Then it will download Kubespray and prepare the nodes. Finally it can automatically run Kubespray to deploy Kubernetes, but you can also choose to hold-of with the Kubespray deployment (see the `run_kubespray` parameter in `variables.tf`, by default run_kubespray = "no"), so that you can tweak the Kubespray parameters. Once have the correct settings in place for Kubespray you can run Kubespray with a single command (`~/run_kubespray.sh`) to deploy Kubernetes.
