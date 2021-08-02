@@ -3,7 +3,7 @@ This Terraform project allows you to deploy Kubernetes on vSphere. It uses Kubes
 
 
 ## Prerequisite
-Install ESXi 6.7/7, deploy VMware vCenter Server Appliance  6.7/7(VCSA) as ESXi VM.
+Install ESXi 6.7/7, deploy VMware vCenter Server Appliance  6.7/7(VCSA) as ESXi VM, create datacenter add ESXi host to it.
 
 REF:
 ```
