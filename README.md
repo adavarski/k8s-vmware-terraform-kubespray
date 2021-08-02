@@ -5,7 +5,7 @@ This Terraform project allows you to deploy Kubernetes on vSphere. It uses Kubes
 ## Prerequisite
 Install ESXi 6.7/7, deploy VMware vCenter Server Appliance  6.7/7(VCSA) as ESXi VM, create k8s-cluster1 resource pool.
 
-Ref:
+REF:
 ```
 https://systemzone.net/vmware-esxi-6-7-installation-and-basic-configuration/
 http://vcallaway.com/esxcli-cheat-sheet/
@@ -44,7 +44,7 @@ To be able to apply this Terraform configuration to your vSphere environment, ma
 ## Deployment procedure
 The following steps need to be executed in order ot deploy Kubernetes using this Terraform configuration to your VMware vSphere environment.
 
-1. Download an Ubuntu Cloud image OVA (http://cloud-images.ubuntu.com/bionic/current/bionic-server-cloudimg-amd64.ova) and add that to your vSphere environment as template virtual machine (Deploy OVF Template: https://www.d-nix.nl/2021/04/using-the-ubuntu-cloud-image-in-vmware/).
+1. Download an Ubuntu Cloud image OVA (http://cloud-images.ubuntu.com/bionic/current/bionic-server-cloudimg-amd64.ova) and add that to your vSphere environment as template virtual machine (Deploy OVF Template REF: https://www.d-nix.nl/2021/04/using-the-ubuntu-cloud-image-in-vmware/).
 2. The first step is to download this repo to you workstation.
 
    ```
