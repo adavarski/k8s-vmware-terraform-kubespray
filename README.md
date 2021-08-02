@@ -58,7 +58,7 @@ The following steps need to be executed in order ot deploy Kubernetes using this
    
      `terraform init`
      
-   - econdly we need to plan the terraform project, to make sure we are ready to deploy. You might get some errors on your vSphere environment details if you made a mistake in the variables.tf file.
+   - Secondly we need to plan the terraform project, to make sure we are ready to deploy. You might get some errors on your vSphere environment details if you made a mistake in the variables.tf file.
    
      `terraform plan`
      
