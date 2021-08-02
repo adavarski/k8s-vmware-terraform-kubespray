@@ -142,11 +142,11 @@ To logon to the administrative host you can use the user created (see `username`
 The command above will automatically connect and log you in on the Administrative host.
 
 **Optional: Tweak Kubespray parameters**
-If you have chosen to not run Kubespray automatically during the deployment, you can now tweak the Kubespray sessions. The parameters are located in the following directory:
+If you have chosen to not run Kubespray automatically during the deployment (by default variables.tf:run_kubespray = "no"), you can now tweak the Kubespray sessions. The parameters are located in the following directory:
 
 `~/kubespray/inventory/k8s-on-vmware/`
 
-Once you're done with the settings, kick-off the Kubespray with the following command to deploy Kubernetes (by default variables.tf:run_kubespray = "no"):
+Once you're done with the settings, kick-off the Kubespray with the following command to deploy Kubernetes:
 
 `~/run-kubespray.sh`
 
@@ -250,10 +250,12 @@ k8sadmin@k8s-adminhost:~$
 This will install Kubernetes and should complete automatically. It might show some errors (especially when configuring etcd), but normally these can be ignored, as Kubespray retries until all services come online.
 
 **Start using Kubernetes**
-Once Kubespray has finished, you can start using the Kubernetes cluster from the Administrative host. The Kubernetes config file is saved by the `run-kubespray.sh` script on the Administrative host, which means that you can start managing the Kubernetes cluster directly using `kubectl`. Before that setup IP of k8s master 
+Once Kubespray has finished, you can start using the Kubernetes cluster from the Administrative host. The Kubernetes config file is saved by the `run-kubespray.sh` script on the Administrative host, which means that you can start managing the Kubernetes cluster directly using `kubectl`. Before that setup IP of k8s master node:
 `sed -i "s/127.0.0.1/192.168.1.151/" ~/.kube/config`
+
 Show nodes:
 `kubectl get nodes -o wide`
+
 Show all Kubernetes resouces on the cluster:
 `kubectl get all -A`
 
