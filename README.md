@@ -122,6 +122,9 @@ k8s-node-ips = [
 ]
 
 ```
+![picture](images/vmware-k8s-5-nodes.png)
+
+
      
 ## Working with the deployment
 Once the deployment is complete you can start using it. 
