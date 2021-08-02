@@ -68,6 +68,61 @@ The following steps need to be executed in order ot deploy Kubernetes using this
    
      `terraform apply`
      
+Example:
+```
+$ terraform apply
+
+An execution plan has been generated and is shown below.
+Resource actions are indicated with the following symbols:
+  + create
+ <= read (data resources)
+
+...
+
+null_resource.generate-sshkey: Creating...
+null_resource.generate-sshkey: Provisioning with 'local-exec'...
+null_resource.generate-sshkey (local-exec): Executing: ["/bin/sh" "-c" "mkdir -p $(dirname keys/id_rsa-k8s-on-vmware)"]
+null_resource.generate-sshkey: Provisioning with 'local-exec'...
+null_resource.generate-sshkey (local-exec): Executing: ["/bin/sh" "-c" "yes n | ssh-keygen -b 4096 -t rsa -C 'k8s-on-vmware-sshkey' -N '' -f keys/id_rsa-k8s-on-vmware"]
+null_resource.generate-sshkey (local-exec): Generating public/private rsa key pair.
+null_resource.generate-sshkey (local-exec): keys/id_rsa-k8s-on-vmware already exists.
+null_resource.generate-sshkey (local-exec): Overwrite (y/n)?
+
+null_resource.generate-sshkey: Creation complete after 0s [id=6695836002409884287]
+data.local_file.ssh-publickey: Reading...
+data.local_file.ssh-privatekey: Reading...
+data.local_file.ssh-privatekey: Read complete after 0s [id=7c1c40fd1f91f9b5144b6d9c44e5d4d585be1225]
+data.local_file.ssh-publickey: Read complete after 0s [id=60bc3ef9032c456aa7ca253f5cdcfbc91821d56d]
+vsphere_virtual_machine.k8s-nodes[0]: Creating...
+vsphere_virtual_machine.k8s-adminhost: Creating...
+vsphere_virtual_machine.k8s-nodes[3]: Creating...
+vsphere_virtual_machine.k8s-nodes[1]: Creating...
+vsphere_virtual_machine.k8s-nodes[2]: Creating...
+vsphere_virtual_machine.k8s-nodes[4]: Creating...
+
+...
+
+null_resource.prepare-kubespray: Still creating... [1m50s elapsed]
+null_resource.prepare-kubespray (remote-exec): Successfully installed MarkupSafe-1.1.1 ansible-3.4.0 ansible-base-2.10.11 cffi-1.14.6 cryptography-2.8 jinja2-2.11.3 jmespath-0.9.5 netaddr-0.7.19 packaging-21.0 pbr-5.4.4 pycparser-2.20 pyparsing-2.4.7 ruamel.yaml-0.16.10 ruamel.yaml.clib-0.2.2
+null_resource.prepare-kubespray: Still creating... [2m0s elapsed]
+null_resource.prepare-kubespray (remote-exec): Using default Kubespray version for Kubernetes deployment
+null_resource.prepare-kubespray: Creation complete after 2m1s [id=5994520031113162565]
+
+Apply complete! Resources: 10 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+k8s-adminhost-ip = "192.168.1.150"
+k8s-node-ips = [
+  "192.168.1.151",
+  "192.168.1.152",
+  "192.168.1.153",
+  "192.168.1.154",
+  "192.168.1.155",
+]
+
+```
+     
 ## Working with the deployment
 Once the deployment is complete you can start using it. 
 
@@ -124,7 +179,7 @@ Run 'do-release-upgrade' to upgrade to it.
 Last login: Mon Aug  2 14:11:44 2021 from 192.168.1.100
 k8sadmin@k8s-adminhost:~$ ls
 kubespray  run-kubespray.sh
-k8sadmin@k8s-adminhost:~$ ./run-kubespray.sh 
+k8sadmin@k8s-adminhost:~$ ./run-kubespray.sh
 DEBUG: Adding group all
 DEBUG: Adding group kube_control_plane
 DEBUG: Adding group kube_node
@@ -133,53 +188,27 @@ DEBUG: Adding group k8s_cluster
 DEBUG: Adding group calico_rr
 DEBUG: adding host node1 to group all
 DEBUG: adding host node2 to group all
+DEBUG: adding host node3 to group all
+DEBUG: adding host node4 to group all
+DEBUG: adding host node5 to group all
 DEBUG: adding host node1 to group etcd
+DEBUG: adding host node2 to group etcd
+DEBUG: adding host node3 to group etcd
 DEBUG: adding host node1 to group kube_control_plane
 DEBUG: adding host node2 to group kube_control_plane
 DEBUG: adding host node1 to group kube_node
 DEBUG: adding host node2 to group kube_node
+DEBUG: adding host node3 to group kube_node
+DEBUG: adding host node4 to group kube_node
+DEBUG: adding host node5 to group kube_node
 
 PLAY [localhost] *****************************************************************************************************************************************************************************************************************
-Monday 02 August 2021  14:24:56 +0300 (0:00:00.044)       0:00:00.044 ********* 
+Monday 02 August 2021  16:01:04 +0300 (0:00:00.043)       0:00:00.043 ********* 
 
-TASK [Check 2.9.0 <= Ansible version < 2.11.0] ***********************************************************************************************************************************************************************************
-ok: [localhost] => {
-    "changed": false,
-    "msg": "All assertions passed"
-}
-Monday 02 August 2021  14:24:56 +0300 (0:00:00.048)       0:00:00.093 ********* 
 
 ...
 
-PLAY RECAP ***********************************************************************************************************************************************************************************************************************
-localhost                  : ok=4    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
-node1                      : ok=585  changed=123  unreachable=0    failed=0    skipped=1154 rescued=0    ignored=1   
-node2                      : ok=447  changed=95   unreachable=0    failed=0    skipped=954  rescued=0    ignored=0   
-
-Monday 02 August 2021  14:36:21 +0300 (0:00:00.100)       0:11:25.065 ********* 
-=============================================================================== 
-container-engine/docker : ensure docker packages are installed ----------------------------------------------------------------------------------------------------------------------------------------------------------- 41.30s
-kubernetes/control-plane : kubeadm | Initialize first master ------------------------------------------------------------------------------------------------------------------------------------------------------------- 25.90s
-kubernetes/control-plane : Joining control plane node to the cluster. ---------------------------------------------------------------------------------------------------------------------------------------------------- 24.15s
-download : download_file | Download item --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- 22.44s
-download : download_container | Download image if required --------------------------------------------------------------------------------------------------------------------------------------------------------------- 17.00s
-download : download_container | Download image if required --------------------------------------------------------------------------------------------------------------------------------------------------------------- 16.49s
-download : download_container | Download image if required --------------------------------------------------------------------------------------------------------------------------------------------------------------- 15.09s
-download : download_file | Download item --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- 14.26s
-download : download_container | Download image if required --------------------------------------------------------------------------------------------------------------------------------------------------------------- 13.05s
-download : download_container | Download image if required --------------------------------------------------------------------------------------------------------------------------------------------------------------- 10.98s
-kubernetes/control-plane : Master | wait for kube-scheduler -------------------------------------------------------------------------------------------------------------------------------------------------------------- 10.34s
-download : download_container | Download image if required ---------------------------------------------------------------------------------------------------------------------------------------------------------------- 9.40s
-download : download_file | Download item ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- 9.13s
-kubernetes-apps/ansible : Kubernetes Apps | Start Resources --------------------------------------------------------------------------------------------------------------------------------------------------------------- 9.02s
-download : download_container | Download image if required ---------------------------------------------------------------------------------------------------------------------------------------------------------------- 8.94s
-download : download_container | Download image if required ---------------------------------------------------------------------------------------------------------------------------------------------------------------- 8.65s
-download : download_file | Download item ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- 8.27s
-download : download_file | Download item ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- 7.98s
-download : download_container | Download image if required ---------------------------------------------------------------------------------------------------------------------------------------------------------------- 7.92s
-etcd : wait for etcd up --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- 6.89s
-Warning: Permanently added '192.168.1.151' (ECDSA) to the list of known hosts.
-config                                                
+            
 
 ```
 This will install Kubernetes and should complete automatically. It might show some errors (especially when configuring etcd), but normally these can be ignored, as Kubespray retries until all services come online.
