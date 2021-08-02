@@ -1,0 +1,42 @@
+#cloud-config
+
+# Create administrative user
+users:
+  - default
+  - name: ${username}
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    groups: sudo
+    shell: /bin/bash
+    ssh_authorized_keys:
+      - ${public-key}
+
+# Install required software packages
+packages:
+  - vim
+  - net-tools
+  - python3-pip
+
+# Set the IP addresses
+write_files:
+  - content: |
+      network:
+          ethernets:
+              ${mgmt-int-name}:
+              %{ if mgmt-use-dhcp == "no" }
+                  dhcp4: false
+                  addresses: [${mgmt-ip-addr}]
+                  gateway4: ${mgmt-ip-gw}
+                  nameservers:
+                      addresses: [${mgmt-dns}] 
+
+              %{ else }
+                  dhcp4: true
+              %{ endif }
+          version: 2
+    path: /etc/netplan/50-cloud-init.yaml
+
+# Activate network changes
+runcmd:
+  - timedatectl set-timezone ${timezone}
+  - netplan apply
+  - touch /etc/cloud/cloud-init.done

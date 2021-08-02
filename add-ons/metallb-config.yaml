@@ -1,0 +1,13 @@
+# Sourced from https://github.com/2vcps/tf4vsphere by Jon Owings
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: metallb-system
+  name: config
+data:
+  config: |
+    address-pools:
+    - name: default
+      protocol: layer2
+      addresses:
+      - 192.168.1.126-192.168.1.129

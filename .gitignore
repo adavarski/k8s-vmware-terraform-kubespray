@@ -1,0 +1,7 @@
+.DS_Store
+*.tfvars
+*.tfstate
+.terraform
+.terraform.tfstate.lock.info
+k8s-on-vmware/keys
+.idea/**
