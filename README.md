@@ -200,10 +200,15 @@ Show all Kubernetes resouces on the cluster:
 Example:
 
 ```
+k8sadmin@k8s-adminhost:~$ kubectl version
+Client Version: version.Info{Major:"1", Minor:"21", GitVersion:"v1.21.3", GitCommit:"ca643a4d1f7bfe34773c74f79527be4afd95bf39", GitTreeState:"clean", BuildDate:"2021-07-15T21:04:39Z", GoVersion:"go1.16.6", Compiler:"gc", Platform:"linux/amd64"}
+Server Version: version.Info{Major:"1", Minor:"21", GitVersion:"v1.21.3", GitCommit:"ca643a4d1f7bfe34773c74f79527be4afd95bf39", GitTreeState:"clean", BuildDate:"2021-07-15T20:59:07Z", GoVersion:"go1.16.6", Compiler:"gc", Platform:"linux/amd64"}
+
 k8sadmin@k8s-adminhost:~$ kubectl get nodes -o wide
 NAME    STATUS   ROLES                  AGE     VERSION   INTERNAL-IP     EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION       CONTAINER-RUNTIME
 node1   Ready    control-plane,master   8m19s   v1.21.3   192.168.1.151   <none>        Ubuntu 18.04.5 LTS   4.15.0-151-generic   docker://20.10.7
 node2   Ready    control-plane,master   7m46s   v1.21.3   192.168.1.152   <none>        Ubuntu 18.04.5 LTS   4.15.0-151-generic   docker://20.10.7
+
 k8sadmin@k8s-adminhost:~$ kubectl get all --all-namespaces
 NAMESPACE     NAME                                           READY   STATUS    RESTARTS   AGE
 kube-system   pod/calico-kube-controllers-5b4d7b4594-rxgl4   1/1     Running   0          6m26s
