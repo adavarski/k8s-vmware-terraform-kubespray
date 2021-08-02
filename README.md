@@ -7,11 +7,9 @@ Install ESXi 6.7/7, deploy VMware vCenter Server Appliance  6.7/7(VCSA) as ESXi 
 
 REF:
 ```
-https://systemzone.net/vmware-esxi-6-7-installation-and-basic-configuration/
-http://vcallaway.com/esxcli-cheat-sheet/
-https://esxsi.com/2018/04/25/vcsa67/
-https://www.wintips.org/how-to-install-vcenter-server-appliance-in-vmware-vsphere-hypervisor-esxi-6-7/
 https://www.nakivo.com/blog/vmware-vsphere-7-installation-setup/
+https://systemzone.net/vmware-esxi-6-7-installation-and-basic-configuration/
+https://www.wintips.org/how-to-install-vcenter-server-appliance-in-vmware-vsphere-hypervisor-esxi-6-7/
 https://github.com/kubernetes-sigs/kubespray/blob/master/docs/vsphere.md
 ```
 
@@ -46,36 +44,52 @@ The following steps need to be executed in order ot deploy Kubernetes using this
 
 1. Download an Ubuntu Cloud image OVA (http://cloud-images.ubuntu.com/bionic/current/bionic-server-cloudimg-amd64.ova) and add that to your vSphere environment as template virtual machine (Deploy OVF Template -> REF: https://www.d-nix.nl/2021/04/using-the-ubuntu-cloud-image-in-vmware/). Create k8s cluster resource pool to your vSphere environment (k8s-cluster1 for example).
 2. The first step is to download this repo to you workstation.
+
    ```
    git clone https://github.com/adavarski/k8s-vmware-terraform-kubespray.git
    ```   
+   
 3. Change the `variables.tf` file to match your environment (see https://github.com/adavarski/k8s-vmware-terraform-kubespray/blob/master/docs/variables.md).
    - Specify your vCenter server details, cluster, datastore and networking details in the `vsphere_config` section;
    - If you which make changes to the `k8s-global` settings or the `k8s-adminhost` settings if you want;
    - Make sure you set the correct iscsi_subnet (if you require it) in the `k8snodes` section.
 4. Deploy Kubernetes using Terraform by executing the following commands:
    - First we need to initialize terraform (downloading the required Terraform providers for this project)
+   
      `terraform init`
+     
    - econdly we need to plan the terraform project, to make sure we are ready to deploy. You might get some errors on your vSphere environment details if you made a mistake in the variables.tf file.
+   
      `terraform plan`
+     
    - Finally apply the project, at which point the VM's and Kubespray are being deployed.
+   
      `terraform apply`
+     
 ## Working with the deployment
 Once the deployment is complete you can start using it. 
 
 **Get the IP addresses**
 The previous `terraform apply` command will return the IP addresses of the Administrative host and the Kubernetes nodes, however if you missed that message, use the following command to get the IP addresses for the deployment.
+
 `terraform output`
+
 **Logon to the administrative host**
 To logon to the administrative host you can use the user created (see `username` option in `variables.tf` file) and the private key that was created by the deployment.
+
 `ssh -i keys/id_rsa-k8s-on-vmware k8sadmin@[use IP address from output above]`
+
 The command above will automatically connect and log you in on the Administrative host.
 
 **Optional: Tweak Kubespray parameters**
 If you have chosen to not run Kubespray automatically during the deployment, you can now tweak the Kubespray sessions. The parameters are located in the following directory:
+
 `~/kubespray/inventory/k8s-on-vmware/`
+
 Once you're done with the settings, kick-off the Kubespray with the following command to deploy Kubernetes (by default variables.tf:run_kubespray = "no"):
+
 `~/run-kubespray.sh`
+
 Example:
 ```
 $ ssh -i keys/id_rsa-k8s-on-vmware k8sadmin@192.168.1.150 -o IdentitiesOnly=yes
