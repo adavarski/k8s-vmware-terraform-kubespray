@@ -71,7 +71,7 @@ variable "k8s-nodes" {
         # Which hostname and virtual machine name do you want to use for the K8S nodes, this name will be followed by the node count (eg. k8s-node1)
         hostname                = "k8s-node"
         # Specify the number of Kubernetes nodes you wish to deploy (normally you should deploy 3 or more)
-        number_of_nodes         = "2"
+        number_of_nodes         = "5"
         # Specify the VM resources for the administrative host
         num_cpus                = "1"
         memory                  = "2048"
