@@ -187,14 +187,17 @@ This will install Kubernetes and should complete automatically. It might show so
 **Start using Kubernetes**
 Once Kubespray has finished, you can start using the Kubernetes cluster from the Administrative host. The Kubernetes config file is saved by the `run-kubespray.sh` script on the Administrative host, which means that you can start managing the Kubernetes cluster directly using `kubectl`. Before that setup IP of k8s master 
 
+`sed -i "s/127.0.0.1/192.168.1.151/" ~/.kube/config`
+
 Show nodes:
 
-`sed -i "s/127.0.0.1/192.168.1.151/" ~/.kube/config`
 `kubectl get nodes -o wide`
 
 Show all Kubernetes resouces on the cluster:
 
 `kubectl get all -A`
+
+Example:
 
 ```
 k8sadmin@k8s-adminhost:~$ kubectl get nodes -o wide
