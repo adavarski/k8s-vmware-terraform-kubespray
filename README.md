@@ -325,7 +325,7 @@ kube-system   replicaset.apps/dns-autoscaler-7df78bfcfb            1         1  
 Well you're on your own from here, however checkout the `add-ons` folder to deploy some regular components like creating a Dashboard user (for some GUI management), Metal Load Balancer (metallb) for a load balancera and the NGINX Ingress service.
 
 
-REF:
+**Ref**:
 ```
 https://www.nakivo.com/blog/vmware-vsphere-7-installation-setup/
 https://systemzone.net/vmware-esxi-6-7-installation-and-basic-configuration/
