@@ -3,7 +3,7 @@ This Terraform project allows you to deploy Kubernetes on vSphere. It uses Kubes
 
 
 ## Prerequisite
-Install ESXi 6.7/7, deploy VMware vCenter Server Appliance  6.7/7(VCSA) as ESXi VM, create k8s-cluster1 resource pool.
+Install ESXi 6.7/7, deploy VMware vCenter Server Appliance  6.7/7(VCSA) as ESXi VM.
 
 REF:
 ```
@@ -44,55 +44,39 @@ To be able to apply this Terraform configuration to your vSphere environment, ma
 ## Deployment procedure
 The following steps need to be executed in order ot deploy Kubernetes using this Terraform configuration to your VMware vSphere environment.
 
-1. Download an Ubuntu Cloud image OVA (http://cloud-images.ubuntu.com/bionic/current/bionic-server-cloudimg-amd64.ova) and add that to your vSphere environment as template virtual machine (Deploy OVF Template REF: https://www.d-nix.nl/2021/04/using-the-ubuntu-cloud-image-in-vmware/).
+1. Download an Ubuntu Cloud image OVA (http://cloud-images.ubuntu.com/bionic/current/bionic-server-cloudimg-amd64.ova) and add that to your vSphere environment as template virtual machine (Deploy OVF Template -> REF: https://www.d-nix.nl/2021/04/using-the-ubuntu-cloud-image-in-vmware/). Create k8s cluster resource pool to your vSphere environment (k8s-cluster1 for example).
 2. The first step is to download this repo to you workstation.
-
    ```
    git clone https://github.com/adavarski/k8s-vmware-terraform-kubespray.git
-   ```
-
+   ```   
 3. Change the `variables.tf` file to match your environment (see https://github.com/adavarski/k8s-vmware-terraform-kubespray/blob/master/docs/variables.md).
    - Specify your vCenter server details, cluster, datastore and networking details in the `vsphere_config` section;
    - If you which make changes to the `k8s-global` settings or the `k8s-adminhost` settings if you want;
    - Make sure you set the correct iscsi_subnet (if you require it) in the `k8snodes` section.
 4. Deploy Kubernetes using Terraform by executing the following commands:
-
    - First we need to initialize terraform (downloading the required Terraform providers for this project)
-   
      `terraform init`
-   
    - econdly we need to plan the terraform project, to make sure we are ready to deploy. You might get some errors on your vSphere environment details if you made a mistake in the variables.tf file.
-   
      `terraform plan`
-   
    - Finally apply the project, at which point the VM's and Kubespray are being deployed.
-   
      `terraform apply`
-   
 ## Working with the deployment
 Once the deployment is complete you can start using it. 
 
 **Get the IP addresses**
 The previous `terraform apply` command will return the IP addresses of the Administrative host and the Kubernetes nodes, however if you missed that message, use the following command to get the IP addresses for the deployment.
-
 `terraform output`
-
 **Logon to the administrative host**
 To logon to the administrative host you can use the user created (see `username` option in `variables.tf` file) and the private key that was created by the deployment.
-
 `ssh -i keys/id_rsa-k8s-on-vmware k8sadmin@[use IP address from output above]`
-
 The command above will automatically connect and log you in on the Administrative host.
 
 **Optional: Tweak Kubespray parameters**
 If you have chosen to not run Kubespray automatically during the deployment, you can now tweak the Kubespray sessions. The parameters are located in the following directory:
-
 `~/kubespray/inventory/k8s-on-vmware/`
-
 Once you're done with the settings, kick-off the Kubespray with the following command to deploy Kubernetes (by default variables.tf:run_kubespray = "no"):
-
 `~/run-kubespray.sh`
-
+Example:
 ```
 $ ssh -i keys/id_rsa-k8s-on-vmware k8sadmin@192.168.1.150 -o IdentitiesOnly=yes
 The authenticity of host '192.168.1.150 (192.168.1.150)' can't be established.
@@ -186,19 +170,13 @@ This will install Kubernetes and should complete automatically. It might show so
 
 **Start using Kubernetes**
 Once Kubespray has finished, you can start using the Kubernetes cluster from the Administrative host. The Kubernetes config file is saved by the `run-kubespray.sh` script on the Administrative host, which means that you can start managing the Kubernetes cluster directly using `kubectl`. Before that setup IP of k8s master 
-
 `sed -i "s/127.0.0.1/192.168.1.151/" ~/.kube/config`
-
 Show nodes:
-
 `kubectl get nodes -o wide`
-
 Show all Kubernetes resouces on the cluster:
-
 `kubectl get all -A`
 
 Example:
-
 ```
 k8sadmin@k8s-adminhost:~$ kubectl version
 Client Version: version.Info{Major:"1", Minor:"21", GitVersion:"v1.21.3", GitCommit:"ca643a4d1f7bfe34773c74f79527be4afd95bf39", GitTreeState:"clean", BuildDate:"2021-07-15T21:04:39Z", GoVersion:"go1.16.6", Compiler:"gc", Platform:"linux/amd64"}
