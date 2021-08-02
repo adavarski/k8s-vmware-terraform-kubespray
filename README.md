@@ -211,6 +211,39 @@ Monday 02 August 2021  16:01:04 +0300 (0:00:00.043)       0:00:00.043 *********
 
 ...
 
+PLAY RECAP ***********************************************************************************************************************************************************************************************************************
+localhost                  : ok=4    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+node1                      : ok=585  changed=123  unreachable=0    failed=0    skipped=1154 rescued=0    ignored=1   
+node2                      : ok=520  changed=111  unreachable=0    failed=0    skipped=1010 rescued=0    ignored=0   
+node3                      : ok=440  changed=91   unreachable=0    failed=0    skipped=692  rescued=0    ignored=0   
+node4                      : ok=367  changed=75   unreachable=0    failed=0    skipped=636  rescued=0    ignored=0   
+node5                      : ok=367  changed=75   unreachable=0    failed=0    skipped=636  rescued=0    ignored=0   
+
+Monday 02 August 2021  16:21:44 +0300 (0:00:00.247)       0:20:39.365 ********* 
+=============================================================================== 
+container-engine/docker : ensure docker packages are installed ----------------------------------------------------------------------------------------------------------------------------------------------------------- 74.88s
+download : download_file | Download item --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- 52.30s
+download : download_container | Download image if required --------------------------------------------------------------------------------------------------------------------------------------------------------------- 31.94s
+download : download_container | Download image if required --------------------------------------------------------------------------------------------------------------------------------------------------------------- 30.79s
+download : download_container | Download image if required --------------------------------------------------------------------------------------------------------------------------------------------------------------- 30.06s
+kubernetes/control-plane : kubeadm | Initialize first master ------------------------------------------------------------------------------------------------------------------------------------------------------------- 28.01s
+download : download_container | Download image if required --------------------------------------------------------------------------------------------------------------------------------------------------------------- 24.98s
+kubernetes/control-plane : Joining control plane node to the cluster. ---------------------------------------------------------------------------------------------------------------------------------------------------- 24.69s
+download : download_container | Download image if required --------------------------------------------------------------------------------------------------------------------------------------------------------------- 19.88s
+download : download_file | Download item --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- 19.53s
+download : download_file | Download item --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- 18.61s
+download : download_container | Download image if required --------------------------------------------------------------------------------------------------------------------------------------------------------------- 17.25s
+download : download_container | Download image if required --------------------------------------------------------------------------------------------------------------------------------------------------------------- 16.17s
+kubernetes/kubeadm : Join to cluster ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- 15.10s
+download : download_container | Download image if required --------------------------------------------------------------------------------------------------------------------------------------------------------------- 14.41s
+download : download | Download files / images ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- 13.91s
+download : download_container | Download image if required --------------------------------------------------------------------------------------------------------------------------------------------------------------- 13.89s
+download : download_file | Download item --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- 13.20s
+download : download_file | Download item --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- 13.09s
+etcd : reload etcd ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- 10.84s
+Warning: Permanently added '192.168.1.151' (ECDSA) to the list of known hosts.
+config                                                                                                                                                                                          100% 5601    11.8MB/s   00:00    
+k8sadmin@k8s-adminhost:~$ 
             
 
 ```
@@ -232,47 +265,64 @@ Server Version: version.Info{Major:"1", Minor:"21", GitVersion:"v1.21.3", GitCom
 
 k8sadmin@k8s-adminhost:~$ kubectl get nodes -o wide
 NAME    STATUS   ROLES                  AGE     VERSION   INTERNAL-IP     EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION       CONTAINER-RUNTIME
-node1   Ready    control-plane,master   8m19s   v1.21.3   192.168.1.151   <none>        Ubuntu 18.04.5 LTS   4.15.0-151-generic   docker://20.10.7
-node2   Ready    control-plane,master   7m46s   v1.21.3   192.168.1.152   <none>        Ubuntu 18.04.5 LTS   4.15.0-151-generic   docker://20.10.7
+node1   Ready    control-plane,master   5m36s   v1.21.3   192.168.1.151   <none>        Ubuntu 18.04.5 LTS   4.15.0-151-generic   docker://20.10.7
+node2   Ready    control-plane,master   5m1s    v1.21.3   192.168.1.152   <none>        Ubuntu 18.04.5 LTS   4.15.0-151-generic   docker://20.10.7
+node3   Ready    <none>                 3m52s   v1.21.3   192.168.1.153   <none>        Ubuntu 18.04.5 LTS   4.15.0-151-generic   docker://20.10.7
+node4   Ready    <none>                 3m52s   v1.21.3   192.168.1.154   <none>        Ubuntu 18.04.5 LTS   4.15.0-151-generic   docker://20.10.7
+node5   Ready    <none>                 3m52s   v1.21.3   192.168.1.155   <none>        Ubuntu 18.04.5 LTS   4.15.0-151-generic   docker://20.10.7
+k8sadmin@k8s-adminhost:~$ 
+
 
 k8sadmin@k8s-adminhost:~$ kubectl get all --all-namespaces
 NAMESPACE     NAME                                           READY   STATUS    RESTARTS   AGE
-kube-system   pod/calico-kube-controllers-5b4d7b4594-rxgl4   1/1     Running   0          6m26s
-kube-system   pod/calico-node-6hp96                          1/1     Running   0          6m52s
-kube-system   pod/calico-node-mq6k2                          1/1     Running   0          6m52s
-kube-system   pod/coredns-8474476ff8-5f4qn                   1/1     Running   0          6m6s
-kube-system   pod/coredns-8474476ff8-f9m6v                   0/1     Pending   0          6m
-kube-system   pod/dns-autoscaler-7df78bfcfb-vhdxq            1/1     Running   0          6m2s
-kube-system   pod/kube-apiserver-node1                       1/1     Running   0          8m29s
-kube-system   pod/kube-apiserver-node2                       1/1     Running   0          7m56s
-kube-system   pod/kube-controller-manager-node1              1/1     Running   0          8m28s
-kube-system   pod/kube-controller-manager-node2              1/1     Running   0          7m56s
-kube-system   pod/kube-proxy-2m2d8                           1/1     Running   0          6m55s
-kube-system   pod/kube-proxy-7hkgf                           1/1     Running   0          6m55s
-kube-system   pod/kube-scheduler-node1                       1/1     Running   0          8m19s
-kube-system   pod/kube-scheduler-node2                       1/1     Running   0          7m56s
-kube-system   pod/nodelocaldns-n4l2p                         0/1     Pending   0          6m
-kube-system   pod/nodelocaldns-pm245                         0/1     Pending   0          6m
+kube-system   pod/calico-kube-controllers-5b4d7b4594-lmb29   1/1     Running   0          2m47s
+kube-system   pod/calico-node-cv5rf                          1/1     Running   0          3m34s
+kube-system   pod/calico-node-cvrt9                          1/1     Running   0          3m34s
+kube-system   pod/calico-node-f8x8l                          1/1     Running   0          3m34s
+kube-system   pod/calico-node-mw7qn                          1/1     Running   0          3m34s
+kube-system   pod/calico-node-vshlp                          1/1     Running   0          3m34s
+kube-system   pod/coredns-8474476ff8-nzhpk                   1/1     Running   0          2m18s
+kube-system   pod/coredns-8474476ff8-tljd6                   1/1     Running   0          2m26s
+kube-system   pod/dns-autoscaler-7df78bfcfb-nxtqt            1/1     Running   0          2m21s
+kube-system   pod/kube-apiserver-node1                       1/1     Running   0          5m45s
+kube-system   pod/kube-apiserver-node2                       1/1     Running   0          5m21s
+kube-system   pod/kube-controller-manager-node1              1/1     Running   0          5m45s
+kube-system   pod/kube-controller-manager-node2              1/1     Running   0          5m21s
+kube-system   pod/kube-proxy-4bl5p                           1/1     Running   0          4m8s
+kube-system   pod/kube-proxy-4s9xw                           1/1     Running   0          4m8s
+kube-system   pod/kube-proxy-7p8qc                           1/1     Running   0          4m8s
+kube-system   pod/kube-proxy-g24tw                           1/1     Running   0          4m9s
+kube-system   pod/kube-proxy-nbmfc                           1/1     Running   0          4m8s
+kube-system   pod/kube-scheduler-node1                       1/1     Running   0          5m56s
+kube-system   pod/kube-scheduler-node2                       1/1     Running   0          5m21s
+kube-system   pod/nginx-proxy-node3                          1/1     Running   0          4m12s
+kube-system   pod/nginx-proxy-node4                          1/1     Running   0          4m12s
+kube-system   pod/nginx-proxy-node5                          1/1     Running   0          4m13s
+kube-system   pod/nodelocaldns-4wn7z                         1/1     Running   0          2m19s
+kube-system   pod/nodelocaldns-8w77b                         1/1     Running   0          2m19s
+kube-system   pod/nodelocaldns-bsflt                         1/1     Running   0          2m19s
+kube-system   pod/nodelocaldns-dx6b4                         0/1     Pending   0          2m19s
+kube-system   pod/nodelocaldns-tp5tx                         0/1     Pending   0          2m19s
 
 NAMESPACE     NAME                 TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)                  AGE
-default       service/kubernetes   ClusterIP   10.233.0.1   <none>        443/TCP                  8m28s
-kube-system   service/coredns      ClusterIP   10.233.0.3   <none>        53/UDP,53/TCP,9153/TCP   6m6s
+default       service/kubernetes   ClusterIP   10.233.0.1   <none>        443/TCP                  5m55s
+kube-system   service/coredns      ClusterIP   10.233.0.3   <none>        53/UDP,53/TCP,9153/TCP   2m25s
 
 NAMESPACE     NAME                          DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR            AGE
-kube-system   daemonset.apps/calico-node    2         2         2       2            2           kubernetes.io/os=linux   6m53s
-kube-system   daemonset.apps/kube-proxy     2         2         2       2            2           kubernetes.io/os=linux   8m26s
-kube-system   daemonset.apps/nodelocaldns   2         2         0       2            0           kubernetes.io/os=linux   6m
+kube-system   daemonset.apps/calico-node    5         5         5       5            5           kubernetes.io/os=linux   3m35s
+kube-system   daemonset.apps/kube-proxy     5         5         5       5            5           kubernetes.io/os=linux   5m53s
+kube-system   daemonset.apps/nodelocaldns   5         5         3       5            3           kubernetes.io/os=linux   2m19s
 
 NAMESPACE     NAME                                      READY   UP-TO-DATE   AVAILABLE   AGE
-kube-system   deployment.apps/calico-kube-controllers   1/1     1            1           6m27s
-kube-system   deployment.apps/coredns                   1/2     2            1           6m7s
-kube-system   deployment.apps/dns-autoscaler            1/1     1            1           6m5s
+kube-system   deployment.apps/calico-kube-controllers   1/1     1            1           2m48s
+kube-system   deployment.apps/coredns                   2/2     2            2           2m27s
+kube-system   deployment.apps/dns-autoscaler            1/1     1            1           2m24s
 
 NAMESPACE     NAME                                                 DESIRED   CURRENT   READY   AGE
-kube-system   replicaset.apps/calico-kube-controllers-5b4d7b4594   1         1         1       6m27s
-kube-system   replicaset.apps/coredns-8474476ff8                   2         2         1       6m7s
-kube-system   replicaset.apps/dns-autoscaler-7df78bfcfb            1         1         1       6m5s
-k8sadmin@k8s-adminhost:~$ 
+kube-system   replicaset.apps/calico-kube-controllers-5b4d7b4594   1         1         1       2m48s
+kube-system   replicaset.apps/coredns-8474476ff8                   2         2         2       2m27s
+kube-system   replicaset.apps/dns-autoscaler-7df78bfcfb            1         1         1       2m24s
+
 
 ```
 **Anything else?**
