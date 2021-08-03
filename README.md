@@ -11,7 +11,7 @@ Besides the Administrative Linux VM, it will create the number of Kubernetes nod
 
 ## VMware vSphere environment install/setup requirements
 
-Install ESXi 6.7/7, deploy VMware vCenter Server Appliance  6.7/7(VCSA) as ESXi VM, create datacenter and add ESXi hosts to it.
+Install ESXi 6.7/7 server(s), deploy VMware vCenter Server Appliance  6.7/7(VCSA) as ESXi VM, create datacenter and add ESXi hosts to it.
 
 ## Local system requirements (laptop/workstation)
 
