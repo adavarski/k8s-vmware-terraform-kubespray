@@ -324,6 +324,7 @@ Well you're on your own from here, however checkout the `add-ons` folder to depl
 
 
 **Ref**:
+
 https://www.nakivo.com/blog/vmware-vsphere-7-installation-setup/
 
 https://systemzone.net/vmware-esxi-6-7-installation-and-basic-configuration/
