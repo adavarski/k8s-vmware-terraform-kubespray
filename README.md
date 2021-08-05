@@ -13,7 +13,7 @@ Besides the Administrative Linux VM, it will create the number of Kubernetes nod
 
 Install ESXi 6.7/7 server(s), deploy VMware vCenter Server Appliance  6.7/7 (VCSA) as ESXi VM, create datacenter and add ESXi hosts to it.
 
-Note: VMWare environment is deploied on HP server for this demo and used ISO files are:
+Note: VMWare vSphere environment has been deployed on HP server for this demo and used ISO files are:
 
 * VMware_ESXi_6.7.0_17700523_HPE_Gen9plus_670.U3.10.7.0.132_May2021.iso (for ESXi installation)
 * VMware-VCSA-all-6.7.0-17138064.iso (for VCSA deploy)
