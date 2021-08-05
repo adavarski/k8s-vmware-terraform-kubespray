@@ -11,7 +11,13 @@ Besides the Administrative Linux VM, it will create the number of Kubernetes nod
 
 ## VMware vSphere environment install/setup requirements
 
-Install ESXi 6.7/7 server(s), deploy VMware vCenter Server Appliance  6.7/7(VCSA) as ESXi VM, create datacenter and add ESXi hosts to it.
+Install ESXi 6.7/7 server(s), deploy VMware vCenter Server Appliance  6.7/7 (VCSA) as ESXi VM, create datacenter and add ESXi hosts to it.
+
+Note: VMWare environment is deploied on HP server for this demo and used ISO files are:
+
+* VMware_ESXi_6.7.0_17700523_HPE_Gen9plus_670.U3.10.7.0.132_May2021.iso (for ESXi installation)
+* VMware-VCSA-all-6.7.0-17138064.iso (for VCSA deploy)
+
 
 ## Local system requirements (laptop/workstation)
 
@@ -317,8 +323,22 @@ kube-system   replicaset.apps/calico-kube-controllers-5b4d7b4594   1         1  
 kube-system   replicaset.apps/coredns-8474476ff8                   2         2         2       2m27s
 kube-system   replicaset.apps/dns-autoscaler-7df78bfcfb            1         1         1       2m24s
 
+```
+
+**Start using Kubernetes from your laptop/workstation**
 
 ```
+$ scp  -o IdentitiesOnly=yes -i keys/id_rsa-k8s-on-vmware k8sadmin@192.168.1.150:~/.kube/config ./kubeconfig 
+$ export KUBECONFIG=./kubeconfig 
+$ kubectl get node -o wide
+NAME    STATUS   ROLES                  AGE     VERSION   INTERNAL-IP     EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION       CONTAINER-RUNTIME
+node1   Ready    control-plane,master   2d19h   v1.21.3   192.168.1.151   <none>        Ubuntu 18.04.5 LTS   4.15.0-151-generic   docker://20.10.7
+node2   Ready    control-plane,master   2d19h   v1.21.3   192.168.1.152   <none>        Ubuntu 18.04.5 LTS   4.15.0-151-generic   docker://20.10.7
+node3   Ready    <none>                 2d19h   v1.21.3   192.168.1.153   <none>        Ubuntu 18.04.5 LTS   4.15.0-151-generic   docker://20.10.7
+node4   Ready    <none>                 2d19h   v1.21.3   192.168.1.154   <none>        Ubuntu 18.04.5 LTS   4.15.0-151-generic   docker://20.10.7
+node5   Ready    <none>                 2d19h   v1.21.3   192.168.1.155   <none>        Ubuntu 18.04.5 LTS   4.15.0-151-generic   docker://20.10.7
+```
+
 **Anything else?**
 Well you're on your own from here, however checkout the `add-ons` folder to deploy some regular components like creating a Dashboard user (for some GUI management), Metal Load Balancer (metallb) for a load balancera and the NGINX Ingress service.
 
