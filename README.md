@@ -541,7 +541,7 @@ https://github.com/kubernetes/ingress-nginx
 https://kubernetes.io/docs/tutorials/stateless-application/expose-external-ip-address/
 
 ```
-**Ref: VMware & Kubespray **
+**Ref: VMware & Kubespray**
 * https://www.nakivo.com/blog/vmware-vsphere-7-installation-setup/
 * https://systemzone.net/vmware-esxi-6-7-installation-and-basic-configuration/
 * https://www.wintips.org/how-to-install-vcenter-server-appliance-in-vmware-vsphere-hypervisor-esxi-6-7/
