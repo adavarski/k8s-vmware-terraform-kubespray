@@ -343,7 +343,198 @@ node5   Ready    <none>                 2d19h   v1.21.3   192.168.1.155   <none>
 Well you're on your own from here, however checkout the `add-ons` folder to deploy some regular components like creating a Dashboard user (for some GUI management), Metal Load Balancer (metallb) for a load balancera and the NGINX Ingress service.
 
 
-**Ref**:
+```
+### Setup MetalLB
+### MetalLB
+### MetalLB is a load-balancer implementation for bare metal Kubernetes clusters, using standard routing protocols.
+
+- Preparation
+# see what changes would be made, returns nonzero returncode if different
+kubectl get configmap kube-proxy -n kube-system -o yaml | \
+sed -e "s/strictARP: false/strictARP: true/" | \
+kubectl diff -f - -n kube-system
+
+# actually apply the changes, returns nonzero returncode on errors only
+kubectl get configmap kube-proxy -n kube-system -o yaml | \
+sed -e "s/strictARP: false/strictARP: true/" | \
+kubectl apply -f - -n kube-system
+
+- Installation By Manifest
+
+kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.10.2/manifests/namespace.yaml
+kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.10.2/manifests/metallb.yaml
+
+kubectl apply -f add-ons/metallb-config.yaml 
+
+Example: 
+$ kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.10.2/manifests/namespace.yaml
+namespace/metallb-system created
+$ kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.10.2/manifests/metallb.yaml
+Warning: policy/v1beta1 PodSecurityPolicy is deprecated in v1.21+, unavailable in v1.25+
+podsecuritypolicy.policy/controller created
+podsecuritypolicy.policy/speaker created
+serviceaccount/controller created
+serviceaccount/speaker created
+clusterrole.rbac.authorization.k8s.io/metallb-system:controller created
+clusterrole.rbac.authorization.k8s.io/metallb-system:speaker created
+role.rbac.authorization.k8s.io/config-watcher created
+role.rbac.authorization.k8s.io/pod-lister created
+role.rbac.authorization.k8s.io/controller created
+clusterrolebinding.rbac.authorization.k8s.io/metallb-system:controller created
+clusterrolebinding.rbac.authorization.k8s.io/metallb-system:speaker created
+rolebinding.rbac.authorization.k8s.io/config-watcher created
+rolebinding.rbac.authorization.k8s.io/pod-lister created
+rolebinding.rbac.authorization.k8s.io/controller created
+daemonset.apps/speaker created
+deployment.apps/controller created
+
+$ kubectl apply -f add-ons/metallb-config.yaml 
+configmap/config created
+
+### Setep NGINX Ingress 
+
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.44.0/deploy/static/provider/cloud/deploy.yaml
+
+Example: 
+$ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.44.0/deploy/static/provider/cloud/deploy.yaml
+namespace/ingress-nginx created
+serviceaccount/ingress-nginx created
+configmap/ingress-nginx-controller created
+clusterrole.rbac.authorization.k8s.io/ingress-nginx created
+clusterrolebinding.rbac.authorization.k8s.io/ingress-nginx created
+role.rbac.authorization.k8s.io/ingress-nginx created
+rolebinding.rbac.authorization.k8s.io/ingress-nginx created
+service/ingress-nginx-controller-admission created
+service/ingress-nginx-controller created
+deployment.apps/ingress-nginx-controller created
+validatingwebhookconfiguration.admissionregistration.k8s.io/ingress-nginx-admission created
+serviceaccount/ingress-nginx-admission created
+clusterrole.rbac.authorization.k8s.io/ingress-nginx-admission created
+clusterrolebinding.rbac.authorization.k8s.io/ingress-nginx-admission created
+role.rbac.authorization.k8s.io/ingress-nginx-admission created
+rolebinding.rbac.authorization.k8s.io/ingress-nginx-admission created
+job.batch/ingress-nginx-admission-create created
+job.batch/ingress-nginx-admission-patch created
+
+Check nginx (might take a few minutes for the service to get the IP, usually just a few seconds though)
+
+$ kubectl get svc -A
+NAMESPACE       NAME                                 TYPE           CLUSTER-IP      EXTERNAL-IP     PORT(S)                      AGE
+default         kubernetes                           ClusterIP      10.233.0.1      <none>          443/TCP                      3d16h
+ingress-nginx   ingress-nginx-controller             LoadBalancer   10.233.34.29    192.168.1.200   80:32637/TCP,443:30110/TCP   48s
+ingress-nginx   ingress-nginx-controller-admission   ClusterIP      10.233.25.156   <none>          443/TCP                      48s
+kube-system     coredns                              ClusterIP      10.233.0.3      <none>          53/UDP,53/TCP,9153/TCP       3d16h
+$ kubectl get svc -n ingress-nginx
+NAME                                 TYPE           CLUSTER-IP      EXTERNAL-IP     PORT(S)                      AGE
+ingress-nginx-controller             LoadBalancer   10.233.34.29    192.168.1.200   80:32637/TCP,443:30110/TCP   66s
+ingress-nginx-controller-admission   ClusterIP      10.233.25.156   <none>          443/TCP                      66s
+
+$ nc -z -v 192.168.1.200 80
+Connection to 192.168.1.200 80 port [tcp/http] succeeded!
+$ nc -z -v 192.168.1.200 443
+Connection to 192.168.1.200 443 port [tcp/https] succeeded!
+
+Webapp example:
+
+$ kubectl apply -f add-ons/webapp.yaml 
+deployment.apps/hello-world created
+
+$ kubectl get pods --output=wide
+NAME                           READY   STATUS    RESTARTS   AGE     IP             NODE    NOMINATED NODE   READINESS GATES
+hello-world-6df5659cb7-2z8xd   1/1     Running   0          3m51s   10.233.70.2    node5   <none>           <none>
+hello-world-6df5659cb7-g55rz   1/1     Running   0          3m51s   10.233.92.4    node3   <none>           <none>
+hello-world-6df5659cb7-jhpdj   1/1     Running   0          3m51s   10.233.105.5   node4   <none>           <none>
+
+$ kubectl get deployments hello-world
+NAME          READY   UP-TO-DATE   AVAILABLE   AGE
+hello-world   3/3     3            3           2m26s
+$ kubectl describe deployments hello-world
+Name:                   hello-world
+Namespace:              default
+CreationTimestamp:      Fri, 06 Aug 2021 09:27:05 +0300
+Labels:                 app.kubernetes.io/name=load-balancer-example
+Annotations:            deployment.kubernetes.io/revision: 1
+Selector:               app.kubernetes.io/name=load-balancer-example
+Replicas:               3 desired | 3 updated | 3 total | 3 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:  app.kubernetes.io/name=load-balancer-example
+  Containers:
+   hello-world:
+    Image:        gcr.io/google-samples/node-hello:1.0
+    Port:         8080/TCP
+    Host Port:    0/TCP
+    Environment:  <none>
+    Mounts:       <none>
+  Volumes:        <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      True    MinimumReplicasAvailable
+  Progressing    True    NewReplicaSetAvailable
+OldReplicaSets:  <none>
+NewReplicaSet:   hello-world-6df5659cb7 (3/3 replicas created)
+Events:
+  Type    Reason             Age    From                   Message
+  ----    ------             ----   ----                   -------
+  Normal  ScalingReplicaSet  2m38s  deployment-controller  Scaled up replica set hello-world-6df5659cb7 to 3
+
+$ kubectl expose deployment hello-world --type=LoadBalancer --name=my-service
+service/my-service exposed
+
+$ kubectl get services my-service
+NAME         TYPE           CLUSTER-IP     EXTERNAL-IP     PORT(S)          AGE
+my-service   LoadBalancer   10.233.33.81   192.168.1.201   8080:31892/TCP   9s
+
+$ kubectl describe services my-service
+Name:                     my-service
+Namespace:                default
+Labels:                   app.kubernetes.io/name=load-balancer-example
+Annotations:              <none>
+Selector:                 app.kubernetes.io/name=load-balancer-example
+Type:                     LoadBalancer
+IP:                       10.233.33.81
+LoadBalancer Ingress:     192.168.1.201
+Port:                     <unset>  8080/TCP
+TargetPort:               8080/TCP
+NodePort:                 <unset>  31892/TCP
+Endpoints:                10.233.105.5:8080,10.233.70.2:8080,10.233.92.4:8080
+Session Affinity:         None
+External Traffic Policy:  Cluster
+Events:
+  Type    Reason        Age               From                Message
+  ----    ------        ----              ----                -------
+  Normal  IPAllocated   35s               metallb-controller  Assigned IP "192.168.1.201"
+  Normal  nodeAssigned  1s (x8 over 35s)  metallb-speaker     announcing from node "node4"
+
+$ kubectl get svc -n ingress-nginx
+NAME                                 TYPE           CLUSTER-IP      EXTERNAL-IP     PORT(S)                      AGE
+ingress-nginx-controller             LoadBalancer   10.233.34.29    192.168.1.200   80:32637/TCP,443:30110/TCP   27m
+ingress-nginx-controller-admission   ClusterIP      10.233.25.156   <none>          443/TCP                      27m
+$ kubectl get svc -A
+NAMESPACE       NAME                                 TYPE           CLUSTER-IP      EXTERNAL-IP     PORT(S)                      AGE
+default         kubernetes                           ClusterIP      10.233.0.1      <none>          443/TCP                      3d17h
+default         my-service                           LoadBalancer   10.233.33.81    192.168.1.201   8080:31892/TCP               3m13s
+ingress-nginx   ingress-nginx-controller             LoadBalancer   10.233.34.29    192.168.1.200   80:32637/TCP,443:30110/TCP   27m
+ingress-nginx   ingress-nginx-controller-admission   ClusterIP      10.233.25.156   <none>          443/TCP                      27m
+kube-system     coredns                              ClusterIP      10.233.0.3      <none>          53/UDP,53/TCP,9153/TCP       3d17h
+
+Test webapp:
+
+$ curl http://192.168.1.201:8080
+Hello Kubernetes!
+
+Ref add-ons: MetalLB & NGINX 
+
+https://metallb.universe.tf/installation/
+https://kubernetes.github.io/ingress-nginx/deploy/
+https://github.com/kubernetes/ingress-nginx
+https://kubernetes.io/docs/tutorials/stateless-application/expose-external-ip-address/
+
+```
+**Ref: VMware & Kubespray **:
 
 * https://www.nakivo.com/blog/vmware-vsphere-7-installation-setup/
 * https://systemzone.net/vmware-esxi-6-7-installation-and-basic-configuration/
