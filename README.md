@@ -327,6 +327,7 @@ kube-system   replicaset.apps/dns-autoscaler-7df78bfcfb            1         1  
 
 **Start using Kubernetes from your laptop/workstation**
 
+Pre: Install kubectl the same version as k8s on vmware environment (v1.21.3 in this demo)
 ```
 $ scp  -o IdentitiesOnly=yes -i keys/id_rsa-k8s-on-vmware k8sadmin@192.168.1.150:~/.kube/config ./kubeconfig 
 $ export KUBECONFIG=./kubeconfig 
@@ -349,6 +350,9 @@ Well you're on your own from here, however checkout the `add-ons` folder to depl
 ### MetalLB is a load-balancer implementation for bare metal Kubernetes clusters, using standard routing protocols.
 
 - Preparation
+# If you’re using kube-proxy in IPVS mode, since Kubernetes v1.14.2 you have to enable strict ARP mode.
+# You can achieve this by editing kube-proxy config in current cluster:
+
 # see what changes would be made, returns nonzero returncode if different
 kubectl get configmap kube-proxy -n kube-system -o yaml | \
 sed -e "s/strictARP: false/strictARP: true/" | \
@@ -369,6 +373,7 @@ kubectl apply -f add-ons/metallb-config.yaml
 Example: 
 $ kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.10.2/manifests/namespace.yaml
 namespace/metallb-system created
+
 $ kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.10.2/manifests/metallb.yaml
 Warning: policy/v1beta1 PodSecurityPolicy is deprecated in v1.21+, unavailable in v1.25+
 podsecuritypolicy.policy/controller created
@@ -424,6 +429,7 @@ default         kubernetes                           ClusterIP      10.233.0.1  
 ingress-nginx   ingress-nginx-controller             LoadBalancer   10.233.34.29    192.168.1.200   80:32637/TCP,443:30110/TCP   48s
 ingress-nginx   ingress-nginx-controller-admission   ClusterIP      10.233.25.156   <none>          443/TCP                      48s
 kube-system     coredns                              ClusterIP      10.233.0.3      <none>          53/UDP,53/TCP,9153/TCP       3d16h
+
 $ kubectl get svc -n ingress-nginx
 NAME                                 TYPE           CLUSTER-IP      EXTERNAL-IP     PORT(S)                      AGE
 ingress-nginx-controller             LoadBalancer   10.233.34.29    192.168.1.200   80:32637/TCP,443:30110/TCP   66s
@@ -434,7 +440,7 @@ Connection to 192.168.1.200 80 port [tcp/http] succeeded!
 $ nc -z -v 192.168.1.200 443
 Connection to 192.168.1.200 443 port [tcp/https] succeeded!
 
-Webapp example:
+Webapp example with LB:
 
 $ kubectl apply -f add-ons/webapp.yaml 
 deployment.apps/hello-world created
@@ -513,6 +519,7 @@ $ kubectl get svc -n ingress-nginx
 NAME                                 TYPE           CLUSTER-IP      EXTERNAL-IP     PORT(S)                      AGE
 ingress-nginx-controller             LoadBalancer   10.233.34.29    192.168.1.200   80:32637/TCP,443:30110/TCP   27m
 ingress-nginx-controller-admission   ClusterIP      10.233.25.156   <none>          443/TCP                      27m
+
 $ kubectl get svc -A
 NAMESPACE       NAME                                 TYPE           CLUSTER-IP      EXTERNAL-IP     PORT(S)                      AGE
 default         kubernetes                           ClusterIP      10.233.0.1      <none>          443/TCP                      3d17h
@@ -540,4 +547,3 @@ https://kubernetes.io/docs/tutorials/stateless-application/expose-external-ip-ad
 * https://systemzone.net/vmware-esxi-6-7-installation-and-basic-configuration/
 * https://www.wintips.org/how-to-install-vcenter-server-appliance-in-vmware-vsphere-hypervisor-esxi-6-7/
 * https://github.com/kubernetes-sigs/kubespray/blob/master/docs/vsphere.md
-etc.
