@@ -533,7 +533,7 @@ Test webapp:
 $ curl http://192.168.1.201:8080
 Hello Kubernetes!
 
-Ref add-ons: MetalLB & NGINX 
+Ref (add-ons): MetalLB & NGINX 
 
 https://metallb.universe.tf/installation/
 https://kubernetes.github.io/ingress-nginx/deploy/
@@ -541,8 +541,7 @@ https://github.com/kubernetes/ingress-nginx
 https://kubernetes.io/docs/tutorials/stateless-application/expose-external-ip-address/
 
 ```
-**Ref: VMware & Kubespray **:
-
+**Ref: VMware & Kubespray **
 * https://www.nakivo.com/blog/vmware-vsphere-7-installation-setup/
 * https://systemzone.net/vmware-esxi-6-7-installation-and-basic-configuration/
 * https://www.wintips.org/how-to-install-vcenter-server-appliance-in-vmware-vsphere-hypervisor-esxi-6-7/
