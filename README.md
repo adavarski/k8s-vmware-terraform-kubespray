@@ -533,6 +533,84 @@ Test webapp:
 $ curl http://192.168.1.201:8080
 Hello Kubernetes!
 
+$ kubectl get all --all-namespaces
+NAMESPACE        NAME                                           READY   STATUS      RESTARTS   AGE
+default          pod/hello-world-6df5659cb7-2z8xd               1/1     Running     0          52m
+default          pod/hello-world-6df5659cb7-g55rz               1/1     Running     0          52m
+default          pod/hello-world-6df5659cb7-jhpdj               1/1     Running     0          52m
+ingress-nginx    pod/ingress-nginx-admission-create-q5r6k       0/1     Completed   0          74m
+ingress-nginx    pod/ingress-nginx-admission-patch-fjst9        0/1     Completed   2          74m
+ingress-nginx    pod/ingress-nginx-controller-dc748d96-c8zh7    1/1     Running     0          74m
+kube-system      pod/calico-kube-controllers-5b4d7b4594-lmb29   1/1     Running     0          3d17h
+kube-system      pod/calico-node-cv5rf                          1/1     Running     0          3d18h
+kube-system      pod/calico-node-cvrt9                          1/1     Running     0          3d18h
+kube-system      pod/calico-node-f8x8l                          1/1     Running     0          3d18h
+kube-system      pod/calico-node-mw7qn                          1/1     Running     0          3d18h
+kube-system      pod/calico-node-vshlp                          1/1     Running     0          3d18h
+kube-system      pod/coredns-8474476ff8-nzhpk                   1/1     Running     0          3d17h
+kube-system      pod/coredns-8474476ff8-tljd6                   1/1     Running     0          3d17h
+kube-system      pod/dns-autoscaler-7df78bfcfb-nxtqt            1/1     Running     0          3d17h
+kube-system      pod/kube-apiserver-node1                       1/1     Running     0          3d18h
+kube-system      pod/kube-apiserver-node2                       1/1     Running     0          3d18h
+kube-system      pod/kube-controller-manager-node1              1/1     Running     0          3d18h
+kube-system      pod/kube-controller-manager-node2              1/1     Running     0          3d18h
+kube-system      pod/kube-proxy-4bl5p                           1/1     Running     0          3d18h
+kube-system      pod/kube-proxy-4s9xw                           1/1     Running     0          3d18h
+kube-system      pod/kube-proxy-7p8qc                           1/1     Running     0          3d18h
+kube-system      pod/kube-proxy-g24tw                           1/1     Running     0          3d18h
+kube-system      pod/kube-proxy-nbmfc                           1/1     Running     0          3d18h
+kube-system      pod/kube-scheduler-node1                       1/1     Running     0          3d18h
+kube-system      pod/kube-scheduler-node2                       1/1     Running     0          3d18h
+kube-system      pod/nginx-proxy-node3                          1/1     Running     0          3d18h
+kube-system      pod/nginx-proxy-node4                          1/1     Running     0          3d18h
+kube-system      pod/nginx-proxy-node5                          1/1     Running     0          3d18h
+kube-system      pod/nodelocaldns-4wn7z                         1/1     Running     0          3d17h
+kube-system      pod/nodelocaldns-8w77b                         1/1     Running     0          3d17h
+kube-system      pod/nodelocaldns-bsflt                         1/1     Running     0          3d17h
+kube-system      pod/nodelocaldns-dx6b4                         0/1     Pending     0          3d17h
+kube-system      pod/nodelocaldns-tp5tx                         0/1     Pending     0          3d17h
+metallb-system   pod/controller-6b78bff7d9-sh6cm                1/1     Running     0          108m
+metallb-system   pod/speaker-bvwgp                              1/1     Running     0          108m
+metallb-system   pod/speaker-cw4mg                              1/1     Running     0          108m
+metallb-system   pod/speaker-fxw6x                              1/1     Running     0          108m
+metallb-system   pod/speaker-ppqhk                              1/1     Running     0          108m
+metallb-system   pod/speaker-qd59p                              1/1     Running     0          108m
+
+NAMESPACE       NAME                                         TYPE           CLUSTER-IP      EXTERNAL-IP     PORT(S)                      AGE
+default         service/kubernetes                           ClusterIP      10.233.0.1      <none>          443/TCP                      3d18h
+default         service/my-service                           LoadBalancer   10.233.33.81    192.168.1.201   8080:31892/TCP               49m
+ingress-nginx   service/ingress-nginx-controller             LoadBalancer   10.233.34.29    192.168.1.200   80:32637/TCP,443:30110/TCP   74m
+ingress-nginx   service/ingress-nginx-controller-admission   ClusterIP      10.233.25.156   <none>          443/TCP                      74m
+kube-system     service/coredns                              ClusterIP      10.233.0.3      <none>          53/UDP,53/TCP,9153/TCP       3d17h
+
+NAMESPACE        NAME                          DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR            AGE
+kube-system      daemonset.apps/calico-node    5         5         5       5            5           kubernetes.io/os=linux   3d18h
+kube-system      daemonset.apps/kube-proxy     5         5         5       5            5           kubernetes.io/os=linux   3d18h
+kube-system      daemonset.apps/nodelocaldns   5         5         3       5            3           kubernetes.io/os=linux   3d17h
+metallb-system   daemonset.apps/speaker        5         5         5       5            5           kubernetes.io/os=linux   108m
+
+NAMESPACE        NAME                                       READY   UP-TO-DATE   AVAILABLE   AGE
+default          deployment.apps/hello-world                3/3     3            3           52m
+ingress-nginx    deployment.apps/ingress-nginx-controller   1/1     1            1           74m
+kube-system      deployment.apps/calico-kube-controllers    1/1     1            1           3d17h
+kube-system      deployment.apps/coredns                    2/2     2            2           3d17h
+kube-system      deployment.apps/dns-autoscaler             1/1     1            1           3d17h
+metallb-system   deployment.apps/controller                 1/1     1            1           108m
+
+NAMESPACE        NAME                                                 DESIRED   CURRENT   READY   AGE
+default          replicaset.apps/hello-world-6df5659cb7               3         3         3       52m
+ingress-nginx    replicaset.apps/ingress-nginx-controller-dc748d96    1         1         1       74m
+kube-system      replicaset.apps/calico-kube-controllers-5b4d7b4594   1         1         1       3d17h
+kube-system      replicaset.apps/coredns-8474476ff8                   2         2         2       3d17h
+kube-system      replicaset.apps/dns-autoscaler-7df78bfcfb            1         1         1       3d17h
+metallb-system   replicaset.apps/controller-6b78bff7d9                1         1         1       108m
+
+NAMESPACE       NAME                                       COMPLETIONS   DURATION   AGE
+ingress-nginx   job.batch/ingress-nginx-admission-create   1/1           8s         74m
+ingress-nginx   job.batch/ingress-nginx-admission-patch    1/1           17s        74m
+
+
+
 Ref (add-ons): MetalLB & NGINX 
 
 https://metallb.universe.tf/installation/
