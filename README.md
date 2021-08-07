@@ -340,7 +340,7 @@ node4   Ready    <none>                 2d19h   v1.21.3   192.168.1.154   <none>
 node5   Ready    <none>                 2d19h   v1.21.3   192.168.1.155   <none>        Ubuntu 18.04.5 LTS   4.15.0-151-generic   docker://20.10.7
 ```
 
-**Anything else?**
+**K8S Add-ons**
 Well you're on your own from here, however checkout the `add-ons` folder to deploy some regular components like creating a Dashboard user (for some GUI management), Metal Load Balancer (metallb) for a load balancera and the NGINX Ingress service.
 
 
