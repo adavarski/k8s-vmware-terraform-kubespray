@@ -27,7 +27,7 @@ To be able to apply this Terraform configuration to your vSphere environment, ma
 
 - Install Terraform, see https://learn.hashicorp.com/terraform/getting-started/install.html for instructions.
 
-  Example steps for installing Terraform :
+  Example:
   
 ```
 #Install terraform
@@ -35,11 +35,8 @@ curl https://releases.hashicorp.com/terraform/0.14.4/terraform_0.14.4_linux_amd6
 cd /tmp/; unzip terraform_0.14.4_linux_amd64.zip
 sudo mv terraform /usr/local/bin/
 rm /tmp/terraform_0.14.4_linux_amd64.zip
+terraform -v
 ```
-
-  Test the Terraform installation (this command should return the Terraform version installed):
-  
-  `terraform -v`
   
 ## Deployment procedure
 The following steps need to be executed in order ot deploy Kubernetes using this Terraform configuration to your VMware vSphere environment.
